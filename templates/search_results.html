@@ -1,0 +1,121 @@
+<html>
+  <head>
+    {% include "base.html" %}
+    
+    <title>Search results</title>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Auralis
+      </a>
+
+        <form method="post" class="form-inline my-2 my-lg-0 mr-auto">
+              <input class="form-control mr-sm-2" type="search" name="search"placeholder="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+          </form>
+
+  {%if not creator %}  <a href="{{ url_for('reg_creator') }}">Register as Creator</a>{%endif%}<a href="{{ url_for('profile',username=username) }}" class="ml-5">Profile </a><a href="{{ url_for('index') }}" class="ml-5">Logout</a>
+    </nav>
+    <h1 class="text-center">Search results for "{{search_term}}"</h1>
+    </head>
+
+
+  
+  <body>
+    
+    <div class="container">
+      <div class="row">
+      <h1>{{songs|length}} Songs found</h1>
+      </div>
+      <div class="row">
+        {%for song in songs%}
+         <div class="col-md-2 text-center">
+        <img src="{{ song.song_image }}"class="img-thumbnail song-img" style="width: 100px; height: 100px;"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>
+        <p class="song-img mb-0"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>{{ song.name }}</p>
+        <p class="mb-0">&#9733; {{song.rating}}</p>
+        <a class="mt-0 font-weight-bold" href="{{ url_for('profile',username=song.artist_name) }}">{{ song.artist_name }}</a>
+         </div>
+        {%endfor%}
+      </div>
+
+      
+      <div class="row">
+      <h1>{{album|length}} Albums found</h1>
+      </div>
+      <div class= "row">
+      {%for alb in album%}
+      <div class="col-md-2 text-center">
+       
+         
+        <a  class="d-block" href="{{url_for('view_album',album=alb.id)}}">
+           <img src="{{alb.album_picture }}" class="img-thumbnail mb-0" style="width: 100px; height: 100px;">
+          <p class="mb-0">{{alb.name}} </p>
+          </a>
+          <p class="mb-0">&#9733; {{alb.rating}}</p>
+        
+        
+        <a class='mt-0 font-weight-bold' href="{{ url_for('profile',username=alb.artist_name) }}">{{alb.artist_name}}</a>
+        </div>
+        {%endfor%}
+      </div>
+
+      <div class="row">
+      <h1>{{playlist|length}} Playlists found</h1>
+      </div>
+        <div class="row">
+        {%for play in playlist%}
+         <div class="col-md-2 text-center">
+           <a  class="d-block" href="{{url_for('view_playlist',playlist=play.id)}}">
+             <img src="{{play.playlist_picture}}" style="width: 100px; height: 100px;">
+             <p>{{play.name}}</p>
+           </a>
+         </div>
+          
+        {%endfor%}
+        </div>
+
+      <div class="row">
+      <h1>{{artist|length}} Artists found</h1>
+      </div>
+        <div class="row">
+        {%for art in artist%}
+          <div class="col-md-2 text-center">
+             
+            <a class= "d-block" href="{{ url_for('profile',username=art.username) }}">
+              <img src="{{art.profile_picture }}" class="img-thumbnail" style="width: 100px; height: 100px;">
+             <p class='mt-0 mb-0 font-weight-bold'> {{art.username}}</p>
+            </a> 
+            <p class="mt-0">&#9733; {{art.rating}}</p>
+          </div>
+        {%endfor%}
+    
+      </div>
+    </div>
+    
+    
+
+    
+    
+    
+    
+ 
+  </body>
+
+
+<footer><a href="https://www.freepik.com/search?format=search&last_filter=query&last_value=music&query=music&type=icon">Icon by Freepik</a>
+  <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+{% include "music_player.html" %}
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+  
+</html>

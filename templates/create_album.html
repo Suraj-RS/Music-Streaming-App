@@ -1,0 +1,36 @@
+<html>
+<head>
+{% include "base.html" %}
+  <style>
+    .card {
+      width:50%;
+      margin: 0 auto;
+
+    }
+  </style>
+  <title>Create Album</title>
+</head>
+<body>
+  <div class="card text-center">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for= "artist"class="form-label">Artist</label>
+      <input class="form-control" type="text" placeholder={{username}} name="artist" disabled>
+    </div>
+    <div class="mb-3">
+      <div class="mb-3">
+        <label for="album_name" class="form-label">Album Name</label>
+        <input class="form-control" type="text" name="album_name" required >
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="album_picture" class="form-label">Choose a picture (optional) </label>
+      <input class="form-control" type="file" name="album_picture" accept=".jpg, .jpeg ,.png">
+    </div>
+    <button type="submit" class="btn btn-primary">Create Album</button>
+  </form>
+  </div>
+</body>
+</html>

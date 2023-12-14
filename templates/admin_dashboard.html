@@ -1,0 +1,162 @@
+<html>
+  <head>
+    {% include "base.html" %}
+    <title> Admin Dashboard</title>
+    <style>
+      .card {
+        
+        margin: 0 auto;
+
+      }
+    </style>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Auralis
+      </a>
+
+    <a href="{{ url_for('detail_artist') }}">Artist Details</a><a href="{{ url_for('detail_user') }}">User Details </a><a href="{{ url_for('detail_album') }}">Album Details </a><a href="{{ url_for('detail_song') }}">Song Details </a><a href="{{ url_for('index') }}">Logout</a>
+    </nav>
+    <h1 class="text-center">Admin Dashboard</h1>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+      <div class="col-md-6">
+        <div class="card ">
+        <h2 class="text-center card-header">General</h2>
+          
+        <h5>Total Users: {{ users|length}}</h5>
+        <h5>Total number of streams: {{ songlog|length}}</h5>
+        <h5>Total number of playlists: {{ playlists|length}}</h5>
+          <br/>
+        <a href= "" class="btn btn-primary">View more details</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card ">
+        <h2 class="text-center card-header">Artists</h2>
+          <div class="row">
+            <div class= "col-md-9">
+        <h5>Total Artists: {{ artists|length }}</h5>
+          {% set ratio = artists|length / users|length %}
+        <h5>Proportion of total users: {{ ratio*100 }}%</h5>
+        <h5>Most Popular artist :{{artists[0].username}} -  &#9733; {{artists[0].rating}} </h5>
+              </div>
+                <div class="col-md-3 d-flex align-items-center justify-content-end"">
+                  <img class="img-thumbnail" src="{{artists[0].profile_picture}}" style="max-width: 120px; max-height: 120px;">
+                </div>
+              </div>
+        <a href= "{{ url_for('detail_artist') }}" class="btn btn-primary">View more details</a>
+        </div>
+      </div>
+      </div>
+      <br/>
+      <h1 class="text-center"> Timeline </h1>
+      <button class="btn btn-primary" onclick="updateGraph('User')">Users</button>
+      <button class="btn btn-primary"onclick="updateGraph('Artist')">Artists</button>
+      <button class="btn btn-primary"onclick="updateGraph('Album')">Albums</button>
+      <button class="btn btn-primary"onclick="updateGraph('Song')">Songs</button>
+      <canvas id="myChart" width="50px" height="10px"></canvas>
+      <br/>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+          <h2 class="text-center card-header">Albums</h2>
+          
+            <div class="row">
+              <div class= "col-md-9">
+          <h5>Total Albums: {{ albums|length }}</h5>
+                <br/>
+          <h5>Highest rated Album : {{albums[0].name}} by {{albums[0].artist_name}}-  &#9733; {{albums[0].rating}} </h5>
+              </div>
+            <div class="col-md-3 d-flex align-items-center justify-content-end">
+                <img class="img-thumbnail" src="{{albums[0].album_picture}}" alt="Your Photo" style="max-width: 120px; max-height: 120px;">
+            </div></div>
+          <!-- <h5>Number of albums added in the past hours</h5> -->
+          <a href= "" class="btn btn-primary">View more details</a>
+          
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card ">
+          <h2 class="text-center card-header">Songs</h2>
+            <div class="row">
+              <div class= "col-md-9">
+          <h5>Total Songs: {{ songs|length }}</h5>
+                <br/>
+          <h5>Highest rated song : {{songs[0].name}} by {{songs[0].artist_name}} : &#9733; {{songs[0].rating}}</h5>
+              </div>
+              <div class="col-md-3 d-flex align-items-center justify-content-end">
+                  <img class="img-thumbnail" src="{{songs[0].song_image}}" style="max-width: 120px; max-height: 120px;">
+              </div></div>
+          <a href= "" class="btn btn-primary">View more details</a>
+          </div>
+        </div>
+      </div>
+      <br/>
+    
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+     
+
+      <script>
+        const sampleData = {
+          labels: ['Within 12 hrs', '12hrs-1day', '1day-1week', '1week-3weeks', 'More than 3weeks'],
+          datasets: [
+            {
+              label: 'New Entries',
+              data: [0, 0, 0, 0, 0],
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }
+          ]
+        };
+        const chartOptions = {
+        title: {
+            display: true,
+            text: 'Choose an option',
+            fontSize: 16
+        }
+        };
+        
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+          type: 'line',
+          data: sampleData,
+          options: chartOptions
+        });
+
+        function updateGraph(category) {
+          fetchDataFromBackend(category)
+            .then(data => {
+              
+              myChart.data.datasets[0].data = data;
+              myChart.options.title.text = `Number of ${category} added`;
+              
+              myChart.update();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        }
+
+        function fetchDataFromBackend(category) {
+          return fetch(`/time/${category}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Bad request');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log(data);
+              return data.data;
+            });
+        }
+      </script>
+
+    
+  </body>

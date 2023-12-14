@@ -1,0 +1,66 @@
+<html>
+  <head>
+    {%include "base.html" %}
+    <title>{{playlist.name}}</title>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Auralis
+      </a>
+
+          <form method="post" class="form-inline my-2 my-lg-0 mr-auto">
+              <input class="form-control mr-sm-2" type="search" name="search"placeholder="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+          </form>
+
+      {%if not creator %}<a href="{{ url_for('reg_creator') }}">Register as Creator</a>{%endif%}<a href="{{ url_for('home') }}" class="ml-5">Home </a><a href="{{ url_for('profile',username=logged_in_user) }}"class="ml-5">Profile </a><a href="{{ url_for('index') }}"class="ml-5">Logout</a>
+    </nav>
+  </head>
+  <br/>
+  <body>
+    <div class="container">
+      <div class="row">
+          <div class="col-md-3">
+      <img src="{{playlist.playlist_picture}}" width="150" height="150" class="img-thumbnail">
+          </div>
+        <div class="col-md-8">
+            <h1 class="display-3 text-center">{{playlist.name}}</h1>
+          <h2 class="display-5 text-center">Created by {{playlist.username}}</h2>
+                {% if logged_in_user==playlist.username %}
+            <a  href="{{url_for('edit_playlist',username=logged_in_user,playlist=playlist.id)}}" class="text-center small d-block">Edit Playlist</a>
+                {% endif %}
+            </div>
+      </div>
+    <br/>
+      {%for song in songs%}
+      <ul class="list-group">
+      {% if loop.index %2 ==0 %}
+      <li class="list-group-item song-img list-group-item-secondary d-flex justify-content-between align-items-center" data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}}>
+              {{ song.name }}
+        <span class="ml-auto">
+           <span class="badge badge-primary badge-pill mr-5">{{ song.artist_name }}</span>
+              <span class="badge badge-secondary badge-pill">&#9733;{{ song.rating }}</span>
+             
+        </span>
+          </li>
+
+      {% else %}
+        <li class="list-group-item song-img list-group-item-primary d-flex justify-content-between align-items-center" data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}}>
+            {{ song.name }}
+          <span class="ml-auto">
+            <span class="badge badge-secondary badge-pill mr-5" >{{ song.artist_name }}</span>
+            <span class="badge badge-primary badge-pill">&#9733;{{ song.rating }}</span>
+            
+          </span>
+        </li>
+
+      {% endif %}
+      {% endfor %}
+      </ul>
+    {%include "music_player.html"%}
+
+
+
+  </body>
+
+</html>

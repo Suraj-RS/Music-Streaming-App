@@ -1,0 +1,56 @@
+<html>
+ <head>
+   {% include "base.html" %}
+   <nav class="navbar navbar-light bg-light">
+     <a class="navbar-brand" href="#">
+       <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+       Auralis
+     </a>
+
+   <a href="{{ url_for('detail_artist') }}">Artist Details</a><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard </a><a href="{{ url_for('detail_album') }}">Album Details </a><a href="{{ url_for('detail_song') }}">Song Details </a><a href="{{ url_for('index') }}">Logout</a>
+   </nav>
+   <h1 class="text-center">Detailed view of Users</h1>
+   <title>Users</title>
+ </head> 
+
+<table class="table table-bordered border-primary container">
+
+  <thead class="thead bg-primary">
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Date of Joining</th>
+      <th>Delete </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in users %}
+    {%if loop.index % 2==0 %}
+  <tr class="table-primary">
+    <td> {{loop.index}} </td>
+    <td> {{row.username}} </td>
+    <td> {{row.time.date()}}</td>
+    <td> <a class="btn btn-danger deleteButton" data-id={{row.username}}>Delete Entry</a>
+</td>
+  </tr>
+    {%else%}
+    <tr class="table-light">
+      <td> {{loop.index}} </td>
+      <td> {{row.username}} </td>
+      <td> {{row.time.date()}}</td>
+      <td> <a class="btn btn-danger deleteButton" data-id={{row.username}}>Delete Entry</a>
+    </td>
+    </tr>
+    {%endif%}
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>category='User';</script>
+
+{%include "delete_entry.html"%}
+
+
+
+
+  </html>

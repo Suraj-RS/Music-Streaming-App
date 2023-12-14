@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head> 
+
+  <style>
+    .card {
+      width:30%;
+      margin: 0 auto;
+
+    }
+  </style>
+<title>Login</title>
+  {%include 'head.html' %}
+</head>
+<body>
+  <br/>
+  <form method="POST">
+    <br/>
+    
+    <div class="card text-center">
+    <div class="form-group">
+      <label for="username" style="float: left;">Username</label>
+      <input type="text" name="username" id="username" required style="float: right;">
+    </div>
+    <div class="form-group">
+      <label for="password" style="float: left;">Password</label>
+      <input type="password" name="password" id="password" required style="float: right;" autocomplete>
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Log In</button>
+      
+  </form>
+      </div>
+      </div>
+    <p class='text-center'> Don't have an account ? <a href="{{ url_for('register') }}">Register here</a></p>
+  {% for mesg in get_flashed_messages() %}
+  <p class= "text-center text-danger">{{ mesg }}</p>
+  {% endfor %}
+  
+</body>
+</body>
+</html>

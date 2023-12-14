@@ -1,0 +1,49 @@
+<html>
+  <head>
+    {% include "base.html" %}
+    <title>Register as Creator !</title>
+    <style>
+      .card {
+        width:30%;
+        margin: 0 auto;
+        
+      }
+    </style>
+  </head>
+<body>
+  <h1 class="text-center">{{username}}, join millions of others to become a creator today</h1>
+  <br/>
+  <h2 class="text-muted lead text-center">Upload your original music and gain a fan following</h2>
+  <br/><br/><br/>
+  <form action="/creator" method="post">
+  
+    <div class= "card text-center">
+    
+    <button type="submit" formmethod="post" name="action" value="register" class="btn btn-outline-success">I'm in!</button>
+    <br/>
+    <button type="submit" formmethod="post" name="action" value="redirect" class="btn btn-outline-danger">Maybe Later</button>
+    </form>
+
+  </div>
+
+  
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</html>

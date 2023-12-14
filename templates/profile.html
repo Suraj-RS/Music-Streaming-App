@@ -1,0 +1,124 @@
+<html>
+  <head>
+    {% include "base.html" %}
+    {% set current_username=current_user %}
+    <title>User Profile</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Auralis
+      </a>
+      <form method="post" class="form-inline my-2 my-lg-0 mr-auto">
+          <input class="form-control mr-sm-2" type="search" name="search"placeholder="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+      </form>
+          
+    {%if not user.creator%}
+    <a href="{{ url_for('reg_creator') }}">Register as Creator</a> {%endif%} <a href="{{ url_for('home') }}" class="ml-5">Home </a><a href="{{ url_for('index') }}" class="ml-5">Logout</a>
+    </nav>
+    <br/>
+    <div class= "container">
+      <div class="row">
+        <div class="col-md-3">
+       
+    <img src={{user.profile_picture}} width="150" height="150" class="img-thumbnail">
+          <form method="post" enctype="multipart/form-data">
+            {% if current_user==user.username %}
+           
+          <div class="mb-3">
+            <label for="profile_pic" class="form-label">Change profile picture</label>
+            <input class="form-control form-control-sm" name="profile_pic" type="file" accept=".jpg, .jpeg ,.png">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        {%endif%}
+          </div>
+        <div class="col-md-8">
+      <h1 class="display-3 text-center">{{user.username}}</h1>{%if user.creator%}
+          <h3 class="text-center">&#9733; {{user.rating}}</p>
+          {%endif%}
+          {% if current_user==user.username %}
+          <h6 class="text-center">{{user.email}}</h6>
+          {% endif %}
+      </div>
+    </div>
+    </div>
+    <br/>
+    <div class="container">
+    {% if user.creator %}
+    <div class="row">
+    <h1> {{albums|length}} Albums created</h1>  
+    </div>
+    <div class= "row">
+    {%for alb in albums%}
+    <div class="col-md-2 text-center">
+      <a class='d-block' href="{{url_for('view_album',album=alb.id)}}">
+        <img src="{{alb.album_picture }}" class="img-thumbnail" style="width: 100px; height: 100px;">
+        <p class="mb-0">{{alb.name}}</p>
+      </a>
+      <p class="mt-0">&#9733; {{alb.rating}}</p>
+      </div>
+    {%endfor%}
+    
+    </div>
+      {% if current_user==user.username %}
+      <div class= "row">
+      <a href="{{ url_for('create_album',username=user.username) }}">Create an album !</a>
+      </div>
+      {% endif %}
+      
+    
+    <div class="row">
+    <h1> {{songs|length}} Songs created</h1>  
+    </div>
+    <div class= "row">
+    {%for song in songs%}
+    <div class="col-md-2 text-center">
+     
+        <img src="{{ song.song_image}}" class="img-thumbnail song-img" style="width: 100px; height: 100px;"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>
+     
+    
+        <p class="song-img mb-0"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>{{song.name}}</p>
+      <p class="mt-0">&#9733; {{song.rating}}</p>
+  
+      </div>
+      {%endfor%} 
+    </div>
+      {% if current_user==user.username %}
+      <div class= "row">
+      <a href="{{ url_for('create_song',username=user.username) }}">Create a song !</a>
+      </div>
+      {% endif %}
+    
+    {% endif %}
+  <div class="row">
+      <h1> {{playlists|length}} Playlists created</h1>  
+      </div>
+      <div class= "row">
+      {%for ply in playlists%}
+      <div class="col-md-2 text-center">
+         <a  class="d-block" href="{{url_for('view_playlist',playlist=ply.id)}}">
+          <img src="{{ ply.playlist_picture }}" class="img-thumbnail" style="width: 100px; height: 100px;">
+          <p>{{ply.name}}</p>
+         </a>
+        </div>
+        {%endfor%}
+        
+      </div>
+      {% if current_user==user.username %}
+        <div class="row">
+       <a  href="{{ url_for('create_playlist',username=user.username) }}">Create a Playlist!</a>
+        </div>
+        {% endif %}
+      </div>
+     
+      </div>
+  </body>
+  <footer>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    {% include "music_player.html" %}
+  </footer>
+</html>

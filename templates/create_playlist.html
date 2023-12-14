@@ -1,0 +1,65 @@
+<html>
+<head>
+{% include "base.html" %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    .card {
+      width:50%;
+      margin: 0 auto;
+
+    }
+    
+  </style>
+  <title>Create Playlist</title>
+</head>
+<body>
+  <div class="card text-center">
+  <form id= "playlistForm" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for= "artist"class="form-label">Artist</label>
+      <input class="form-control" type="text" placeholder={{username}} name="artist" form-control-plaintext disabled>
+    </div>
+   
+      <div class="mb-3">
+        <label for="playlist_name" class="form-label">Playlist Name</label>
+        <input class="form-control" type="text" name="playlist_name">
+    </div>
+      <div id="songFields" >
+        <label for="song1" class="form-label" >Add Song:</label>
+        <input class="form-control songInput" list="datalistOptions" name="song1" required>
+      </div>
+      
+    <datalist id="datalistOptions">
+      {% for song in songs %}
+      <option value={{song.id}}>{{song.name}}</option>
+      {% endfor %}
+      </datalist>
+
+
+    <button type="button" id="addSong">Add Another Song</button>
+
+
+    <div class="mb-3">
+      <label for="playlist_picture" class="form-label">Choose a picture (optional) </label>
+      <input class="form-control" type="file" name="playlist_picture" accept=".jpg, .jpeg ,.png">
+    </div>
+    <button type="submit" class="btn btn-primary">Create playlist</button>
+  </form>
+  </div>
+
+<script>
+$(document).ready(function() {
+    var songCount = 1;
+
+    $('#addSong').click(function() {
+        songCount++;
+        var newSongField = $('<div>').html(
+            '<label for="song' + songCount + '" class="form-label">Add Song:</label>' +
+            '<input class="form-control" list="datalistOptions" class="songInput" name="song' + songCount + '" required>'
+        );
+        $('#songFields').append(newSongField);
+    });
+});
+</script>
+  </body>
+</html>

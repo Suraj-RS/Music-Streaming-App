@@ -1,0 +1,43 @@
+<html>
+<head>
+{% include "base.html" %}
+  <style>
+    .card {
+      width:50%;
+      margin: 0 auto;
+
+    }
+  </style>
+  <title>Create Song</title>
+</head>
+
+  <div class="card">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="mb-2">
+        <label for= "artist"class="form-label">Artist</label>
+        <input class="form-control" type="text" placeholder={{username}} name="artist" disabled>
+      </div>
+      <div class="mb-3">
+        <label for="song_title" class="form-label" >Song Title</label>
+        <input class="form-control" type="text" name="song_title" required>
+      </div>
+      <label for="album_title" class="form-label">Album Title</label>
+      <select class="form-select" name="album_title">
+        {% if def_alb %}
+        <option value={{def_alb.id}} selected>{{def_alb.name}}</option>
+        {% endif %}
+        {% for alb in albums %}
+        <option value={{alb.id}}>{{alb.name}}</option>
+        {% endfor %}
+      </select>
+      <a href="{{ url_for('create_album',username=username) }}">Create a new album</a>
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Choose an MP3 file</label>
+        <input class="form-control" type="file" name="mp3File" accept=".mp3">
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+  </div>
+
+  
+</html>

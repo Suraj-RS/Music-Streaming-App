@@ -1,0 +1,68 @@
+<html>
+<head>
+  {%include "base.html" %}
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    .card {
+      width:50%;
+      margin: 0 auto;
+
+    }
+  </style>
+ <h1 class="text-center"> Edit your album</h1>
+ <title>Edit</title>
+</head>
+<br/>
+
+<body>  
+  <div class="card text-center">
+  <form method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+          <label for="album_name" class="form-label">Album Name</label>
+          <input class="form-control" type="text" name="album_name" value="{{album.name }}" disabled>
+      </div>
+    {% set img_path = "../../" ~ album.album_picture %}
+    <h5> Set Album picture :</h5>
+    <img src="{{img_path}}" class="img-thumbnail mb-0" style="width: 100px; height: 100px;">
+    <input class="form-control form-control-sm" name="album_picture" type="file" accept=".jpg, .jpeg ,.png">
+
+      <div id="songFields">
+          {% for song in album_songs %}
+          <div class="mb-3">
+              <label for="song{{ loop.index }}" class="form-label">Song {{ loop.index }}</label>
+              <input class="form-control" list="datalistOptions"  value="{{ song.name }}" disabled>
+          </div>
+          {% endfor %}
+      </div>
+    <datalist id="datalistOptions">
+      {% for song in songs %}
+      <option value={{song.id}}> {{song.name}} </option>
+      {% endfor %}
+      </datalist>
+    <br/>
+      <button type="button" class="btn btn-success" id="addSong">Add Song</button>
+
+      <button type="submit" name="edit" class="btn btn-primary">Save Album</button>
+  </form>
+    <br/><br/>
+    <form method="post">
+      <button type="submit" name="delete" class="btn btn-danger">Delete Album</button>
+    </form>
+  </div>
+  <script>
+      $(document).ready(function() {
+          $('#addSong').click(function() {
+              var newIndex = $('#songFields div').length + 1;
+              var newSongField = $('<div>').html(
+                  '<label class="form-label">Add Song:</label>' +
+                  '<input class="form-control" list="datalistOptions" class="songInput" name="song${newIndex}" required>' +
+                  '<button type="button" class="btn btn-danger mt-1" onclick="removeSongField(this)">Remove</button>'
+              );
+              $('#songFields').append(newSongField);
+          });
+      });
+
+      function removeSongField(button) {
+          $(button).closest('div').remove();
+      }
+  </script>

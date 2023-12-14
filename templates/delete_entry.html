@@ -1,0 +1,22 @@
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $(".deleteButton").click(function() {
+      const entryId = $(this).data("id");
+
+
+      $.ajax({
+        type: "DELETE",
+        url: `/delete/${category}/${entryId}`,  
+        success: function(response) {
+          console.log("Entry deleted successfully");
+        },
+        error: function(error) {
+          console.error("Error deleting entry", error);
+        }
+      });
+      console.log(`/delete/${category}/${entryId}`)
+    });
+  });
+</script>

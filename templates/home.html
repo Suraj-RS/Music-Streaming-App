@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% include "base.html" %}
+    <title>Auralis</title>
+</head>
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+    Auralis
+  </a>
+  
+      <form method="post" class="form-inline my-2 my-lg-0 mr-auto">
+          <input class="form-control mr-sm-2" type="search" name="search"placeholder="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+      </form>
+  {%if not creator %}
+<a href="{{ url_for('reg_creator') }}"class="ml-5">Register as Creator</a>{%endif%}<a href="{{ url_for('profile',username=username) }}"class="ml-5">Profile </a><a href="{{ url_for('index') }}"class="ml-5">Logout</a>
+</nav>
+</div>
+<h1 class= text-center>Welcome back, {{username}}!</h1>
+{% set current_username=username %}
+
+<body>
+<br/>
+  <div class="container">
+    <div class="row">
+      <h1>Your recent plays</h1>
+    </div>
+      {%if songlog|length > 0 %}
+      <div class="row">
+      {% for song in songlog %}
+      <div class="col-md-2 text-center">
+      <img src="{{ song.song_image }}"class="img-thumbnail song-img" style="width: 100px; height: 100px;"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>
+      <p class="song-img mb-0"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>{{ song.name }}</p>
+      <!-- <p class="mb-0">&#9733; {{song.rating}}</p> -->
+      <a class="mt-0 font-weight-bold" href="{{ url_for('profile',username=song.artist_name) }}">{{ song.artist_name }}</a>
+       </div>
+      {%endfor%}
+        </div>
+      {%else%}
+      <p>No recent plays</p>
+      {%endif%}
+    
+  <div class='row'>
+    <h1>Your frequent plays</h1>
+  </div>
+    {%if songlog|length > 0 %}
+      <div class="row">
+      {% for song in song_favs %}
+      <div class="col-md-2 text-center">
+      <img src="{{ song.song_image }}"class="img-thumbnail song-img" style="width: 100px; height: 100px;"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>
+      <p class="song-img mb-0"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>{{ song.name }}</p>
+      <!-- <p class="mb-0">&#9733; {{song.rating}}</p> -->
+      <a class="mt-0 font-weight-bold" href="{{ url_for('profile',username=song.artist_name) }}">{{ song.artist_name }}</a>
+       </div>
+      {%endfor%}
+        </div>
+      {%else%}
+      <p>No plays</p>
+      {%endif%}
+    
+    <div class='row'>
+      <h1>Popular Songs</h1>
+    </div>
+      {%if highest_rated|length > 0 %}
+        <div class="row">
+        {% for song in highest_rated %}
+        <div class="col-md-2 text-center">
+        <img src="{{ song.song_image }}"class="img-thumbnail song-img" style="width: 100px; height: 100px;"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>
+        <p class="song-img mb-0"data-audio={{song.path}} data-img={{song.song_image}} data-title={{song.name}} data-artist={{song.artist_name}} data-songid={{song.id}}>{{ song.name }}</p>
+        <!-- <p class="mb-0">&#9733; {{song.rating}}</p> -->
+        <a class="mt-0 font-weight-bold" href="{{ url_for('profile',username=song.artist_name) }}">{{ song.artist_name }}</a>
+         </div>
+        {%endfor%}
+          </div>
+        {%else%}
+        <p>Nothing to display</p>
+        {%endif%}
+      
+    <div class='row'>
+      <h1>Recently added albums</h1>
+    </div>
+      {%if recents|length > 0 %}
+        <div class="row">
+          {%for alb in recents%}
+          <div class="col-md-2 text-center">
+
+
+            <a  class="d-block" href="{{url_for('view_album',album=alb.id)}}">
+               <img src="{{alb.album_picture }}" class="img-thumbnail mb-0" style="width: 100px; height: 100px;">
+              <p class="mb-0">{{alb.name}} </p>
+              </a>
+            <a class='mt-0 font-weight-bold' href="{{ url_for('profile',username=alb.artist_name) }}">{{alb.artist_name}}</a>
+            </div>
+
+          
+        {%endfor%}
+        {%else%}
+        <p>Nothing to display</p>
+        {%endif%}
+      </div>
+
+
+
+
+
+
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+  </div>
+    {%include "music_player.html"%}
+</body>
+</html>

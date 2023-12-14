@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+<style>
+.song-img:hover {
+  cursor: pointer;
+}
+.rating {
+    cursor: pointer;
+  }
+
+.fas {
+    color: #ddd;
+    font-size: 20px;
+    margin: autoauto;
+  }
+  .rating{
+    margin: auto auto;
+  }
+  #audioPlayer{
+    margin: auto auto;
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.song-img').click(function() {
+      resetStars();
+      data = $(this).data();
+      $('#audioPlayer').attr('src', data.audio);
+      $('#song_img').attr('src', data.img);
+      $('#song_name').text(data.title);
+      $('#artist_name').text(data.artist);
+      $('#audioPlayer')[0].play();
+      var username = "{{ current_username }}"
+      $.ajax({
+          type: "POST",
+          url: `/song_clicked/${data.songid}/${username}`, 
+          success: function(response) {
+              console.log(response);  
+          },
+          error: function(error) {
+              console.error(error);  
+          }
+      });
+    });
+
+    $('.fa-star').hover(function() {
+      var index = $(this).data('index');
+      highlightStars(index);
+    }, function() {
+      if (!$('.fa-star.clicked').length) {
+        resetStars();
+      }
+    });
+
+    $('.fa-star').click(function() {
+      var index = $(this).data('index');
+      console.log(data);
+      handleStarClick(index, data.songid);
+    });
+  });
+
+  function highlightStars(index) {
+    resetStars();
+    for (var i = 1; i <= index; i++) {
+      $('.fa-star[data-index="' + i + '"]').css('color', 'gold');
+    }
+  }
+
+  function resetStars() {
+    $('.fa-star').css('color', '#ccc');
+  }
+
+  function handleStarClick(index, songId) {
+    highlightStars(index);
+    $('.fa-star[data-index="' + index + '"]').addClass('clicked');
+    var username = "{{ current_username }}" ;
+    var ratingData = {
+      username: username,
+      songId: songId,
+      rating: index
+    };
+    console.log(ratingData)
+    $.ajax({
+      type: "POST",
+      url: `/rating/${songId}/${username}/${index}`,  
+      success: function(response) {
+        console.log('Rating submitted successfully');
+      },
+      error: function(error) {
+        console.error('Error submitting rating:', error);
+      }
+    });
+  }
+</script>
+
+
+
+
+<div class="container-fluid fixed-bottom bg-primary mt-5 " >
+  <div class="row">
+    <div class="col-5 media">
+
+      <img id= "song_img"src= "{{url_for('static', filename='favicon.png')}}" class= "img-thumbnail"style="width: 64px; height: 64px;">
+
+      <div class="media-body text-white ml-3">
+      <h5 id="song_name"> Choose a song </h5>
+      <h6 id="artist_name"> No song playing</h6>
+
+        </div>
+    </div>
+
+    <div class="col-5 align-items-center">
+      <audio id="audioPlayer" controls>
+        Your browser does not support the audio element.
+      </audio>
+      </div>
+      <div class="rating col-2" data-rating="0">
+        <i class="fas fa-star" data-index="1"></i>
+        <i class="fas fa-star" data-index="2"></i>
+        <i class="fas fa-star" data-index="3"></i>
+        <i class="fas fa-star" data-index="4"></i>
+        <i class="fas fa-star" data-index="5"></i>
+      </div>
+
+    
+
+  </div>
+</div>
+
+

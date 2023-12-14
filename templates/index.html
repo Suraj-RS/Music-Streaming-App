@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Welcome !</title>
+  
+    <style>
+      .card {
+        width:30%;
+        margin: 0 auto;
+
+      }
+    </style>
+    
+  {%include 'head.html' %}
+ 
+  <br/>
+  <br/>
+
+</head>
+<body>
+  <br/>
+  <br/>
+  <br/>
+
+  <div class="card text-center">
+    <h5>Log in or sign up</h5>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Log in</a>
+
+    <br/>
+    <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Sign up</a>
+    <br/>
+    
+  </div>
+  
+</body>
+</html>
