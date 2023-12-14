@@ -41,7 +41,6 @@ class User(db.Model):
                            cascade="all, delete-orphan")
   playlist = db.relationship("Playlist",
                            backref="user",
-                           uselist=False,
                            cascade="all, delete-orphan")
   time = db.Column(db.DateTime)
 
@@ -68,7 +67,6 @@ class Artist(db.Model):
   time = db.Column(db.DateTime)
   albums = db.relationship("Album",
                            backref="artist",
-                           uselist=False,
                            cascade="all, delete-orphan")
 
 
@@ -113,7 +111,7 @@ class Admin(db.Model):
 
 
 with app.app_context():
-  #  db.drop_all()
+  # db.drop_all()
   db.create_all()
   #  admin=Admin(username="ABC", password="pass")
   #  db.session.add(admin)
@@ -589,18 +587,18 @@ def edit_album(username, album):
         curr_album.album_picture = '../' + path
         db.session.commit()
         album_picture.save(path)
-        songs = []
-        for key in request.form:
-          if key.startswith('song'):
-            song_id = request.form.get(key)
-            songs.append(int(song_id))
-        songs = Song.query.filter(Song.id.in_(songs)).all()
-        for song in songs:
-          song.album_id = album
-        album_songs = Song.query.filter_by(album_id=curr_album.id).all()
-        for song in album_songs:
-          song.song_image = curr_album.album_picture
-          db.session.commit()
+      songs = []
+      for key in request.form:
+        if key.startswith('song'):
+          song_id = request.form.get(key)
+          songs.append(int(song_id))
+      songs = Song.query.filter(Song.id.in_(songs)).all()
+      for song in songs:
+        song.album_id = album
+      album_songs = Song.query.filter_by(album_id=curr_album.id).all()
+      for song in album_songs:
+        song.song_image = curr_album.album_picture
+        db.session.commit()
       return redirect(url_for("view_album", album=curr_album.id))
     elif 'delete' in request.form:
       db.session.delete(curr_album)
